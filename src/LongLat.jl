@@ -5,7 +5,7 @@ using Documenter
 """
 Position is a module that responsible for position related calculation
 """
-export LongLat,UNITMOVE
+#export LongLat,UNITMOVE
 
 const UNITMOVE = 0.00015
 

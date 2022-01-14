@@ -2,3 +2,8 @@ name = "ilp"
 uuid = "9c7e23f7-39ed-4916-a4b1-5732c2dca52d"
 authors = ["when"]
 version = "0.1.0"
+
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+GeoJSON = "61d90e0f-e114-555e-ac52-39dfb47a3ef9"
+JDBC = "6042db11-3c3d-5e84-8dba-9cbf74c9ba48"
