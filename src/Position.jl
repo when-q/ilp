@@ -9,21 +9,35 @@ export LongLat,UNITMOVE,Line2D
 
 const UNITMOVE = 0.00015
 
-"LongLat stores longitude, latitude and angle of a drone at a specific position"
+"""
+	struct LongLat
+A structure that stores position related property for an object
+
+Fields
+------
+* `longitude`: the longitude of the position of any point
+* `latitude`:  the latitude of the position of any point
+* `angle`:     the angle of the drone at a specific point, in integer. It is required to be a multiple of 10.
+
+"""
 struct LongLat
 	longitude::Float64
 	latitude::Float64	
 	angle::Int64
 end
 
-"Line2D represents a line by its starting and ending point"
+"""
+	Line2D(s::LongLat, e::LongLat)
+
+Line2D represents a line by its starting and ending point
+"""
 struct Line2D
 	s::LongLat
 	e::LongLat
 end
 
-@doc """
-	isconfined(coord)
+"""
+	isconfined(coord::LongLat)::Bool
 
 Takes a coordinate and check whether it's in the confinement zone.
 returns true if it is in the zone.
@@ -41,9 +55,12 @@ function isconfined(coord::LongLat)::Bool
 end
 
 """
-	(a,b)->(c,d) intersects (p, q) -> (r, s)
+	intersects(e::Line2D, l::Line2D)::Bool
+
+`(a,b)→(c,d)` intersects `(p,q) → (r,s)`
+Check whether two lines intersects
 """
-function intersects(e::Line2D, l::Line2D)
+function intersects(e::Line2D, l::Line2D)::Bool
 	det =  (e.e.longitude- e.s.longitude)
 		*(l.e.latitude- l.s.latitude) 
 		-(l.e.longitude - l.s.longitude)
@@ -65,7 +82,7 @@ function intersects(e::Line2D, l::Line2D)
 	end
 end
 
-@doc """
+"""
 	distanceto(a::LongLat, b::LongLat)::Float64
 
 Calculate the distance between two coordinates
@@ -76,7 +93,9 @@ function distanceto(a::LongLat, b::LongLat)::Float64
 	return √(x_diff^2 + y_diff^2)
 end
 
-@doc """
+"""
+	distanceto(a::LongLat, b::LongLat, noflyzone::Vector{Vector{Line2D}})::Float64
+
 Get the distance between two coordinates, if it intersects
 the no-fly zone it will be set to a high value
 """
@@ -94,13 +113,21 @@ function distanceto(a::LongLat,b::LongLat, noflyzone::Vector{Vector{Line2D}})::F
 	return √(xdiff^2 +ydiff^2)
 end
 
-@doc "check whether two points are close to each other"
-function closeTo(coord::LongLat, point::LongLat)::Bool
+"""
+	closeto(coord::LongLat, point::LongLat)::Bool
+
+check whether two points are close to each other
+"""
+function closeto(coord::LongLat, point::LongLat)::Bool
 	return distanceto(coord, point) < UNITMOVE
 end
 
 
-@doc "Get the next position of the drone"
+"""
+	nextPosition(coord::LongLat, θ::Int64)::LongLat
+
+Get the next position of the drone
+"""
 function nextPosition(coord::LongLat, θ::Int64)::LongLat
 	xmove = UNITMOVE * cosd(θ)
 	ymove = UNITMOVE * sind(θ)
